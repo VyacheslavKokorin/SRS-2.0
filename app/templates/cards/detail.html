@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}{{ card.word }} - SRS 2.0{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>{{ card.word }}</h1>
+  <form method="post" action="{{ url_for('main.delete_card', card_id=card.id) }}" onsubmit="return confirm('Удалить карточку?');">
+    {{ csrf_token() }}
+    <button type="submit" class="btn btn-outline-danger">Удалить карточку</button>
+  </form>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-6">
+    <h3>Примеры</h3>
+    {% if card.examples %}
+      <div class="list-group">
+        {% for example in card.examples %}
+          <div class="list-group-item">
+            <div class="d-flex justify-content-between">
+              <div>
+                <span class="badge text-bg-secondary">{{ 'EN→RU' if example.direction == 'EN_RU' else 'RU→EN' }}</span>
+                <p class="mb-1"><strong>{{ example.prefix }}</strong> <span class="text-warning">{{ example.focus }}</span> {{ example.suffix }}</p>
+                <p class="mb-1 text-muted">Перевод: {{ example.translation }}</p>
+                <p class="mb-0 small text-muted">Интервал: {{ example.interval_minutes|format_interval }} | Следующее повторение: {{ example.next_review_at.strftime('%d.%m.%Y %H:%M') }}</p>
+              </div>
+              <form method="post" action="{{ url_for('main.delete_example', example_id=example.id) }}" onsubmit="return confirm('Удалить пример?');">
+                {{ csrf_token() }}
+                <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>Пока нет примеров.</p>
+    {% endif %}
+  </div>
+  <div class="col-lg-6">
+    <h3>Добавить пример</h3>
+    <form method="post">
+      {{ form.hidden_tag() }}
+      <div class="mb-3">
+        {{ form.direction.label(class_='form-label') }}
+        {{ form.direction(class_='form-select') }}
+      </div>
+      <div class="mb-3">
+        {{ form.prefix.label(class_='form-label') }}
+        {{ form.prefix(class_='form-control') }}
+        {% for error in form.prefix.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+      </div>
+      <div class="mb-3">
+        {{ form.focus.label(class_='form-label') }}
+        {{ form.focus(class_='form-control') }}
+        {% for error in form.focus.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+      </div>
+      <div class="mb-3">
+        {{ form.suffix.label(class_='form-label') }}
+        {{ form.suffix(class_='form-control') }}
+        {% for error in form.suffix.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+      </div>
+      <div class="mb-3">
+        {{ form.translation.label(class_='form-label') }}
+        {{ form.translation(class_='form-control') }}
+        {% for error in form.translation.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+      </div>
+      {{ form.submit(class_='btn btn-primary') }}
+    </form>
+  </div>
+</div>
+{% endblock %}

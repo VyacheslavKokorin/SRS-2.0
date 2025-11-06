@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Statistics - SRS 2.0{% endblock %}
+{% block content %}
+<h1 class="mb-4">Статистика</h1>
+<div class="row g-4 mb-4">
+  <div class="col-md-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Всего карточек</h5>
+        <p class="display-6">{{ cards|length }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Всего примеров</h5>
+        <p class="display-6">{{ total_examples }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Карточек к повторению</h5>
+        <p class="display-6">{{ due_examples }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h5 class="card-title">Средний интервал всех примеров</h5>
+    <p class="fs-4">{{ average_interval|format_interval }}</p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Add Card - SRS 2.0{% endblock %}
+{% block content %}
+<h1 class="mb-4">Добавить карточку</h1>
+<form method="post">
+  {{ form.hidden_tag() }}
+  <div class="mb-3">
+    {{ form.word.label(class_='form-label') }}
+    {{ form.word(class_='form-control') }}
+    {% for error in form.word.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+  </div>
+  <h4>Пример EN → RU</h4>
+  <div class="row g-3">
+    <div class="col-md-4">
+      {{ form.en_prefix.label(class_='form-label') }}
+      {{ form.en_prefix(class_='form-control') }}
+    </div>
+    <div class="col-md-4">
+      {{ form.en_focus.label(class_='form-label') }}
+      {{ form.en_focus(class_='form-control') }}
+    </div>
+    <div class="col-md-4">
+      {{ form.en_suffix.label(class_='form-label') }}
+      {{ form.en_suffix(class_='form-control') }}
+    </div>
+  </div>
+  <div class="mt-3">
+    {{ form.en_translation.label(class_='form-label') }}
+    {{ form.en_translation(class_='form-control') }}
+  </div>
+
+  <h4 class="mt-4">Пример RU → EN</h4>
+  <div class="row g-3">
+    <div class="col-md-4">
+      {{ form.ru_prefix.label(class_='form-label') }}
+      {{ form.ru_prefix(class_='form-control') }}
+    </div>
+    <div class="col-md-4">
+      {{ form.ru_focus.label(class_='form-label') }}
+      {{ form.ru_focus(class_='form-control') }}
+    </div>
+    <div class="col-md-4">
+      {{ form.ru_suffix.label(class_='form-label') }}
+      {{ form.ru_suffix(class_='form-control') }}
+    </div>
+  </div>
+  <div class="mt-3">
+    {{ form.ru_translation.label(class_='form-label') }}
+    {{ form.ru_translation(class_='form-control') }}
+  </div>
+  <div class="mt-4">
+    {{ form.submit(class_='btn btn-success') }}
+  </div>
+</form>
+{% endblock %}

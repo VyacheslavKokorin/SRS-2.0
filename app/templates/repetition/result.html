@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Результат - SRS 2.0{% endblock %}
+{% block content %}
+<h1 class="mb-4">Результат</h1>
+<div class="card shadow-sm">
+  <div class="card-body">
+    {% if correct %}
+      <div class="alert alert-success">Правильно! Новый интервал: {{ example.interval_minutes|format_interval }}</div>
+    {% else %}
+      <div class="alert alert-danger">Неверно. Правильный ответ: <strong>{{ example.translation }}</strong></div>
+    {% endif %}
+    <p class="text-muted">Предложение:</p>
+    <p class="fs-5">{{ example.prefix }} <span class="text-warning fw-bold">{{ example.focus }}</span> {{ example.suffix }}</p>
+    <form method="post" action="{{ url_for('main.start_repetition') }}">
+      {{ continue_form.hidden_tag() }}
+      {{ continue_form.submit(class_='btn btn-primary') }}
+    </form>
+  </div>
+</div>
+{% endblock %}
