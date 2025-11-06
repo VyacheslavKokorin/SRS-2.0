@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Settings - SRS 2.0{% endblock %}
+{% block content %}
+<h1 class="mb-4">Настройки</h1>
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Интервалы</h5>
+        <form method="post">
+          {{ settings_form.hidden_tag() }}
+          <div class="mb-3">
+            {{ settings_form.interval_multiplier.label(class_='form-label') }}
+            {{ settings_form.interval_multiplier(class_='form-control') }}
+            {% for error in settings_form.interval_multiplier.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="mb-3">
+            {{ settings_form.initial_interval_minutes.label(class_='form-label') }}
+            {{ settings_form.initial_interval_minutes(class_='form-control') }}
+            {% for error in settings_form.initial_interval_minutes.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          </div>
+          {{ settings_form.submit(class_='btn btn-primary') }}
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Смена пароля</h5>
+        <form method="post">
+          {{ password_form.hidden_tag() }}
+          <div class="mb-3">
+            {{ password_form.current_password.label(class_='form-label') }}
+            {{ password_form.current_password(class_='form-control') }}
+            {% for error in password_form.current_password.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="mb-3">
+            {{ password_form.new_password.label(class_='form-label') }}
+            {{ password_form.new_password(class_='form-control') }}
+            {% for error in password_form.new_password.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="mb-3">
+            {{ password_form.confirm_password.label(class_='form-label') }}
+            {{ password_form.confirm_password(class_='form-control') }}
+            {% for error in password_form.confirm_password.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          </div>
+          {{ password_form.submit(class_='btn btn-outline-primary') }}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

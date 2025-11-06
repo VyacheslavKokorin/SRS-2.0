@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Cards - SRS 2.0{% endblock %}
+{% block content %}
+<h1 class="mb-4">Карточки</h1>
+<div class="table-responsive">
+  <table class="table table-striped" id="cards-table">
+    <thead>
+      <tr>
+        <th scope="col">Слово</th>
+        <th scope="col">Средний интервал EN→RU</th>
+        <th scope="col">Средний интервал RU→EN</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for card in cards %}
+      <tr>
+        <td>{{ card.word }}</td>
+        <td>{{ card.average_interval('EN_RU')|format_interval }}</td>
+        <td>{{ card.average_interval('RU_EN')|format_interval }}</td>
+        <td><a href="{{ url_for('main.card_detail', card_id=card.id) }}" class="btn btn-sm btn-outline-primary">Открыть</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const table = document.querySelector('#cards-table');
+    if (!table) return;
+    table.querySelectorAll('th').forEach((th, index) => {
+      th.addEventListener('click', () => sortTable(table, index));
+    });
+    const filterInputs = createFilters(table);
+    table.parentElement.insertBefore(filterInputs, table);
+  });
+
+  function sortTable(table, column) {
+    const rows = Array.from(table.querySelectorAll('tbody tr'));
+    const isNumeric = column > 0;
+    const current = table.dataset.sortColumn == column ? table.dataset.sortOrder : 'asc';
+    const nextOrder = current === 'asc' ? 'desc' : 'asc';
+    rows.sort((a, b) => {
+      const aText = a.children[column].innerText.trim();
+      const bText = b.children[column].innerText.trim();
+      if (isNumeric) {
+        const parseValue = (text) => parseFloat(text) || 0;
+        return nextOrder === 'asc' ? parseValue(aText) - parseValue(bText) : parseValue(bText) - parseValue(aText);
+      }
+      return nextOrder === 'asc' ? aText.localeCompare(bText) : bText.localeCompare(aText);
+    });
+    const tbody = table.querySelector('tbody');
+    rows.forEach((row) => tbody.appendChild(row));
+    table.dataset.sortColumn = column;
+    table.dataset.sortOrder = nextOrder;
+  }
+
+  function createFilters(table) {
+    const container = document.createElement('div');
+    container.className = 'row g-3 mb-3';
+    table.querySelectorAll('thead th').forEach((th, index) => {
+      if (index === table.querySelectorAll('thead th').length - 1) return;
+      const col = document.createElement('div');
+      col.className = 'col-md-4';
+      const input = document.createElement('input');
+      input.className = 'form-control';
+      input.placeholder = 'Фильтр по ' + th.innerText;
+      input.addEventListener('input', () => filterTable(table));
+      input.dataset.column = index;
+      col.appendChild(input);
+      container.appendChild(col);
+    });
+    return container;
+  }
+
+  function filterTable(table) {
+    const filters = Array.from(table.parentElement.querySelectorAll('input[data-column]'));
+    const rows = Array.from(table.querySelectorAll('tbody tr'));
+    rows.forEach((row) => {
+      const show = filters.every((input) => {
+        const value = input.value.trim().toLowerCase();
+        if (!value) return true;
+        const cellText = row.children[input.dataset.column].innerText.toLowerCase();
+        return cellText.includes(value);
+      });
+      row.style.display = show ? '' : 'none';
+    });
+  }
+</script>
+{% endblock %}

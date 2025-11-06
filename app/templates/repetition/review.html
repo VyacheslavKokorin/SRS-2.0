@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Repetition - SRS 2.0{% endblock %}
+{% block content %}
+<h1 class="mb-4">Повторение</h1>
+<div class="card shadow-sm">
+  <div class="card-body">
+    <p class="text-muted">Направление: {{ 'EN→RU' if example.direction == 'EN_RU' else 'RU→EN' }}</p>
+    <p class="fs-4">
+      {{ example.prefix }}
+      <span class="text-warning fw-bold">{{ example.focus }}</span>
+      {{ example.suffix }}
+    </p>
+    <form method="post" class="mt-4">
+      {{ form.hidden_tag() }}
+      {{ form.example_id(value=example.id) }}
+      <div class="mb-3">
+        {{ form.answer.label(class_='form-label') }}
+        {{ form.answer(class_='form-control form-control-lg') }}
+        {% for error in form.answer.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+      </div>
+      {{ form.submit(class_='btn btn-primary btn-lg') }}
+    </form>
+  </div>
+</div>
+{% endblock %}
